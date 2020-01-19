@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/reset"
+        android:icon="@drawable/ic_refresh_24dp"
+        android:title="Reset"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/play"
+        android:icon="@drawable/ic_play_arrow_24dp"
+        android:title="Play Animation"
+        app:showAsAction="always"/>
+
+</menu>
