@@ -1,6 +1,8 @@
 package com.example.dungeonmaster
 
+import android.annotation.TargetApi
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -119,6 +121,7 @@ class MainActivity : AppCompatActivity() {
             currentOp = Operations.END
         }
 
+        bfs.isChecked = true
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
                 R.id.bfs -> currentAlgo = Algos.BFS
@@ -168,6 +171,9 @@ class MainActivity : AppCompatActivity() {
                     changeBgColor(x, y, Color.YELLOW)
                     visited[x][y] = true
                 }
+                else{
+                    changeBgColor(x, y, Color.GRAY)
+                }
 
 
                 for (i in dx.indices) {
@@ -189,7 +195,75 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     private fun findPathDjikstra(x1: Int, y1: Int, x2: Int, y2: Int) = runBlocking {
+        data class Node(val x: Int, val y: Int, val dist: Int)
+
+        val visited = Array(n) {
+            BooleanArray(m) { false }
+        }
+
+        val distance = Array(n) {
+            IntArray(m) { -1 }
+        }
+
+        val parent = Array(n) {
+            Array(m) {
+                Array(2) {
+                    -1
+                }
+            }
+        }
+
+        val priorityQueue  = PriorityQueue<Node> {
+                node1, node2 -> if(node1.dist > node2.dist) 1 else if(node1.dist == node2.dist)  0 else -1
+        }
+
+        distance[x1][y1] = 0
+        priorityQueue.add(Node(x1, y1, distance[x1][y1]))
+
+        var reachedEnd = false
+        var node: Node
+
+        job = CoroutineScope(Dispatchers.Default).launch {
+            while (!priorityQueue.isEmpty()) {
+                node = priorityQueue.poll() ?: Node(0, 0, 0)
+                visited[node.x][node.y] = true
+                changeBgColor(node.x, node.y, Color.YELLOW)
+
+
+                // We already found a better path before we got to
+                // processing this node so we can ignore it.
+                if (distance[node.x][node.y] < node.dist)
+                    continue
+
+                if (dataGrid[node.x][node.y] == Operations.END) {
+                    reachedEnd = true
+                    break
+                }
+
+                for (i in dx.indices) {
+                    val nX = node.x + dx[i]
+                    val nY = node.y + dy[i]
+
+                    if (nX >= 0 && nY >= 0 && nX < n && nY < m && dataGrid[nX][nY] != Operations.OBSTRUCTION && !visited[nX][nY]) {
+                        val newDist = distance[node.x][node.y] + 1
+                        if (newDist < distance[nX][nY] || distance[nX][nY] == -1) {
+                            parent[nX][nY][0] = node.x
+                            parent[nX][nY][1] = node.y
+                            distance[nX][nY] = newDist
+                            priorityQueue.add(Node(nX, nY, newDist))
+                        }
+                    }
+                }
+            }
+
+
+            if (!reachedEnd) withContext(Dispatchers.Main) {
+                Toast.makeText(this@MainActivity, "No path b/w S and E", Toast.LENGTH_LONG).show()
+            }
+            else pathAnim(parent, 0, x1, y1, x2, y2)
+        }
 
     }
 
@@ -247,7 +321,7 @@ class MainActivity : AppCompatActivity() {
                             visited[nX][nY] = true
                             changeBgColor(nX, nY, Color.YELLOW)
                         }
-                        else if (nX != x1 && nY != y1 && nX != x2 && nY != y2) {
+                        else if (!(nX == x1 && nY == y1)) {
                             changeBgColor(nX, nY, Color.GRAY)
                         }
                     }

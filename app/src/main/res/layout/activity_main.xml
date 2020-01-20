@@ -12,7 +12,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="true"
+        app:behavior_peekHeight="48dp"
         android:background="@color/colorPrimary">
 
         <Button
@@ -37,7 +38,7 @@
             android:text="Add Obstruction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <Button
             android:id="@+id/startButton"
@@ -52,7 +53,9 @@
             android:id="@+id/endButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Set End"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/obsButtons"
             app:layout_constraintStart_toStartOf="@+id/obsButtons"
             app:layout_constraintTop_toBottomOf="@+id/startButton" />
@@ -61,37 +64,49 @@
             android:id="@+id/radioGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/endButton">
+            app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
                 android:id="@+id/bfs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:layout_weight="1"
+                android:background="@drawable/border"
+                android:buttonTint="@android:color/white"
+                android:gravity="center"
                 android:text="BFS"
+                android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
             <RadioButton
                 android:id="@+id/dfs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:text="DFS" />
+                android:background="@drawable/border"
+                android:buttonTint="@android:color/white"
+                android:gravity="center"
+                android:text="DFS"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
             <RadioButton
                 android:id="@+id/djikstra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:layout_weight="1"
-                android:text="DJIKSTRA" />
+                android:background="@drawable/border"
+                android:buttonTint="@android:color/white"
+                android:gravity="center"
+                android:text="DJIKSTRA"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
 
         </RadioGroup>
 
